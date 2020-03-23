@@ -4,9 +4,40 @@
   
     
     <entry>
+      <title>C++语法特性笔记</title>
+      <link href="/2020/03/23/c-yu-fa-shu-li/"/>
+      <url>/2020/03/23/c-yu-fa-shu-li/</url>
+      
+        <content type="html"><![CDATA[<p><a href="https://github.com/huihut/interview" target="_blank" rel="noopener">项目地址</a></p><h2 id="const"><a href="#const" class="headerlink" title="const"></a>const</h2><p>一句话概括：被const修饰的（在const之后的变量）值不可改变</p><pre><code>class A{private:    const int a;                // 常对象成员，只能在初始化列表赋值public:    // 构造函数    A() : a(0) { };    A(int x) : a(x) { };        // 初始化列表    // const可用于对重载函数的区分    int getValue();             // 普通成员函数    int getValue() const;       // 常成员函数，不得修改类中的任何数据成员的值};void function(){    // 对象    A b;                        // 普通对象，可以调用全部成员函数、更新常成员变量    const A a;                  // 常对象，只能调用常成员函数    const A *p = &amp;a;            // 指针变量，指向常对象    const A &amp;q = a;             // 指向常对象的引用    // 指针    char greeting[] = &quot;Hello&quot;;    char* p1 = greeting;                // 指针变量，指向字符数组变量    const char* p2 = greeting;          // 指针变量，指向字符数组常量（const 后面是 char，说明指向的字符（char）不可改变）    char* const p3 = greeting;          // 自身是常量的指针，指向字符数组变量（const 后面是 p3，说明 p3 指针自身不可改变）    const char* const p4 = greeting;    // 自身是常量的指针，指向字符数组常量}</code></pre><p>注意：<br>没有从const reference（引用本质上就是const pointer）</p><pre><code>const int* function6();     // 返回的是一个指向常量的指针变量（即指针指向的是一个常量的地址，不可指向变量的地址，但指针的指向的地址值可以改变）int* const function7();     // 返回的是一个指向变量的常指针（指针所指向的地址不变，而该地址所对应的变量可以被修改）</code></pre><h2 id="static"><a href="#static" class="headerlink" title="static"></a>static</h2><p>作用：<br>1修饰变量：使变量存储于静态区，main函数之前就已经分配了空间（若用户未初始化，则系统默认初始化）<br>2修饰普通函数：表明函数仅仅作用于定义了该函数的文件中，防止与他人命名空间中的函数重名<br>3修饰成员变量：使该类的所有对象共有一个该变量，而且无需生成对象就可以访问该成员。<br>4修饰成员函数：无需生成对象就可以访问该函数，但在 static 函数内不可访问非static成员。</p><h2 id="this指针"><a href="#this指针" class="headerlink" title="this指针"></a>this指针</h2><p>隐含在每一个非static成员函数中，指向调用该成员函数的那个对象<br>当对一个对象调用成员函数时，编译程序先将对象的地址赋给 this 指针，然后调用成员函数，每次成员函数存取数据成员时，都隐式使用 this 指针。<br>当一个成员函数被调用时，自动向它传递一个隐含的参数，该参数是一个指向这个成员函数所在的对象的指针。<br>this 指针被隐含地声明为: ClassName *const this，这意味着不能给 this 指针赋值；<br>this 是个右值，所以不能取得 this 的地址（不能 &amp;this）。<br>需要显式引用 this 指针的场景：<br>1.为实现对象的链式引用；<br>2.为避免对同一对象进行赋值操作；<br>3.在实现一些数据结构时，如 list。</p><h2 id="inline函数"><a href="#inline函数" class="headerlink" title="inline函数"></a>inline函数</h2><p>相当于宏，却比宏多了类型检查，真正具有函数特性；<br>编译器一般不内联包含循环、递归、switch 等复杂操作的内联函数；<br>在类声明中定义的函数，除了虚函数的其他函数都会自动隐式地当成内联函数。（也可以显式写出inline函数）<br>编译器对 inline 函数的处理步骤：<br>将 inline 函数体复制到 inline 函数调用点处；<br>为所用 inline 函数中的局部变量分配内存空间；<br>将 inline 函数的的输入参数和返回值映射到调用方法的局部变量空间中；<br>如果 inline 函数有多个返回点，将其转变为 inline 函数代码块末尾的分支（使用 GOTO）。</p><p>优点：<br>内联函数同宏函数一样将在被调用处进行代码展开，省去了参数压栈、栈帧开辟与回收，结果返回等，从而提高程序运行速度。<br>内联函数相比宏函数来说，在代码展开时，会做安全检查或自动类型转换（同普通函数），而宏定义则不会。<br>在类中声明同时定义的成员函数，自动转化为内联函数，因此内联函数可以访问类的成员变量，宏定义则不能。<br>内联函数在运行时可调试，而宏定义不可以。</p><p>缺点：<br>代码膨胀。<br>inline 函数无法随着函数库升级而升级，inline函数的改变需要重新编译。<br>是否内联，程序员不可控。内联函数只是对编译器的建议，是否对函数内联，决定权在于编译器。<br>注意：<br>虚函数可以是内联函数（可以被inline 修饰）。但在虚函数表现出多态特性时不能内联</p><h2 id="assert"><a href="#assert" class="headerlink" title="assert()"></a>assert()</h2><p>断言，是宏，非函数。assert 宏的原型定义在 assert.h（C）、cassert（C++）中。<br>作用:<br>如果它的条件返回错误，则终止程序执行。可以通过定义 NDEBUG 来关闭 assert，但是需要在源代码的开头，include &lt;assert.h&gt; 之前。</p><pre><code>#define NDEBUG          // 加上这行，则 assert 不可用#include &lt;assert.h&gt;assert( p != NULL );    // assert 不可用</code></pre><h2 id="pragma-pack-n"><a href="#pragma-pack-n" class="headerlink" title="pragma pack(n)"></a>pragma pack(n)</h2><p>设定结构体、联合以及类成员变量以 n 字节方式对齐</p><p>pragma pack(n) 使用</p><pre><code>#pragma pack(push)  // 保存对齐状态#pragma pack(4)     // 设定为 4 字节对齐struct test{    char m1;    double m4;    int m3;};#pragma pack(pop)   // 恢复对齐状态</code></pre><h2 id="位域"><a href="#位域" class="headerlink" title="位域"></a>位域</h2><p>Bit mode: 2;    // mode 占 2 位</p><p>类可以将其（非静态）数据成员定义为位域（bit-field），在一个位域中含有一定数量的二进制位。当一个程序需要向其他程序或硬件设备传递二进制数据时，通常会用到位域。<br>位域在内存中的布局是与机器有关的<br>位域的类型必须是整型或枚举类型，带符号类型中的位域的行为将因具体实现而定<br>取地址运算符（&amp;）不能作用于位域，任何指针都无法指向类的位域</p><h2 id="extern-“C”"><a href="#extern-“C”" class="headerlink" title="extern “C”"></a>extern “C”</h2><p>被 extern 限定的函数或变量是 extern 类型的<br>被 extern “C” 修饰的变量和函数是按照 C 语言方式编译和链接的<br>extern “C” 的作用是让 C++ 编译器将 extern “C” 声明的代码当作 C 语言代码处理，可以避免 C++ 因符号修饰导致代码不能和C语言库中的符号进行链接的问题。</p><p>extern “C” 使用</p><pre><code>#ifdef __cplusplusextern &quot;C&quot; {#endifvoid *memset(void *, int, size_t);#ifdef __cplusplus}#endif</code></pre><hr>]]></content>
+      
+      
+      <categories>
+          
+          <category> C++ </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> object </tag>
+            
+            <tag> class </tag>
+            
+            <tag> pointer </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Hello World</title>
-      <link href="/2020/03/22/hello-world/"/>
-      <url>/2020/03/22/hello-world/</url>
+      <link href="/2020/03/21/hello-world/"/>
+      <url>/2020/03/21/hello-world/</url>
       
         <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class=" language-bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span></code></pre><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class=" language-bash"><code class="language-bash">$ hexo server</code></pre><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class=" language-bash"><code class="language-bash">$ hexo generate</code></pre><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class=" language-bash"><code class="language-bash">$ hexo deploy</code></pre><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
       
