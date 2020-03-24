@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="C++语法特性笔记, 锐大大">
+    <meta name="keywords" content="动态规划, 锐大大">
     <meta name="description" content="霓为衣兮风为马，云之君兮纷纷而来下">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>C++语法特性笔记 | 锐大大</title>
+    <title>动态规划 | 锐大大</title>
     <link rel="icon" type="image/png" href="/dog.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -306,12 +306,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/images/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/3.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">C++语法特性笔记</h1>
+                    <h1 class="description center-align post-title">动态规划</h1>
                 </div>
             </div>
         </div>
@@ -333,20 +333,16 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/C/">
-                                <span class="chip bg-color">C++</span>
+                            <a href="/tags/leetcode/">
+                                <span class="chip bg-color">leetcode</span>
                             </a>
                         
-                            <a href="/tags/object/">
-                                <span class="chip bg-color">object</span>
+                            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
+                                <span class="chip bg-color">动态规划</span>
                             </a>
                         
-                            <a href="/tags/class/">
-                                <span class="chip bg-color">class</span>
-                            </a>
-                        
-                            <a href="/tags/pointer/">
-                                <span class="chip bg-color">pointer</span>
+                            <a href="/tags/%E7%AE%97%E6%B3%95/">
+                                <span class="chip bg-color">算法</span>
                             </a>
                         
                     </div>
@@ -357,8 +353,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/C/" class="post-category">
-                                C++
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                算法
                             </a>
                         
                     </div>
@@ -370,7 +366,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-23
+                    2020-03-24
                 </div>
                 
 
@@ -379,7 +375,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.2k
+                    858
                 </div>
                 
 
@@ -392,123 +388,35 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>本文的所记录的内容仅用于个人学习，完整内容请参考<a href="https://github.com/huihut/interview" target="_blank" rel="noopener">这里</a></p>
-<h2 id="const"><a href="#const" class="headerlink" title="const"></a>const</h2><p>一句话概括：被const修饰的（在const之后的变量）值不可改变</p>
-<pre><code>class A
-{
-private:
-    const int a;                // 常对象成员，只能在初始化列表赋值
-
-public:
-    // 构造函数
-    A() : a(0) { };
-    A(int x) : a(x) { };        // 初始化列表
-
-    // const可用于对重载函数的区分
-    int getValue();             // 普通成员函数
-    int getValue() const;       // 常成员函数，不得修改类中的任何数据成员的值
-};
-void function()
-{
-    // 对象
-    A b;                        // 普通对象，可以调用全部成员函数、更新常成员变量
-    const A a;                  // 常对象，只能调用常成员函数
-    const A *p = &amp;a;            // 指针变量，指向常对象
-    const A &amp;q = a;             // 指向常对象的引用
-
-    // 指针
-    char greeting[] = &quot;Hello&quot;;
-    char* p1 = greeting;                // 指针变量，指向字符数组变量
-    const char* p2 = greeting;          // 指针变量，指向字符数组常量（const 后面是 char，说明指向的字符（char）不可改变）
-    char* const p3 = greeting;          // 自身是常量的指针，指向字符数组变量（const 后面是 p3，说明 p3 指针自身不可改变）
-    const char* const p4 = greeting;    // 自身是常量的指针，指向字符数组常量
-}</code></pre><p>注意：<br>没有从const reference（引用本质上就是const pointer）</p>
-<pre><code>const int* function6();     // 返回的是一个指向常量的指针变量（即指针指向的是一个常量的地址，不可指向变量的地址，但指针的指向的地址值可以改变）
-int* const function7();     // 返回的是一个指向变量的常指针（指针所指向的地址不变，而该地址所对应的变量可以被修改）</code></pre><h2 id="static"><a href="#static" class="headerlink" title="static"></a>static</h2><p>作用：<br>1修饰变量：使变量存储于静态区，main函数之前就已经分配了空间（若用户未初始化，则系统默认初始化）<br>2修饰普通函数：表明函数仅仅作用于定义了该函数的文件中，防止与他人命名空间中的函数重名<br>3修饰成员变量：使该类的所有对象共有一个该变量，而且无需生成对象就可以访问该成员。<br>4修饰成员函数：无需生成对象就可以访问该函数，但在 static 函数内不可访问非static成员。</p>
-<h2 id="this指针"><a href="#this指针" class="headerlink" title="this指针"></a>this指针</h2><p>隐含在每一个非static成员函数中，指向调用该成员函数的那个对象<br>当对一个对象调用成员函数时，编译程序先将对象的地址赋给 this 指针，然后调用成员函数，每次成员函数存取数据成员时，都隐式使用 this 指针。<br>当一个成员函数被调用时，自动向它传递一个隐含的参数，该参数是一个指向这个成员函数所在的对象的指针。<br>this 指针被隐含地声明为: ClassName *const this，这意味着不能给 this 指针赋值；<br>this 是个右值，所以不能取得 this 的地址（不能 &amp;this）。<br>需要显式引用 this 指针的场景：<br>1.为实现对象的链式引用；<br>2.为避免对同一对象进行赋值操作；<br>3.在实现一些数据结构时，如 list。</p>
-<h2 id="inline函数"><a href="#inline函数" class="headerlink" title="inline函数"></a>inline函数</h2><p>相当于宏，却比宏多了类型检查，真正具有函数特性；<br>编译器一般不内联包含循环、递归、switch 等复杂操作的内联函数；<br>在类声明中定义的函数，除了虚函数的其他函数都会自动隐式地当成内联函数。（也可以显式写出inline函数）<br>编译器对 inline 函数的处理步骤：<br>将 inline 函数体复制到 inline 函数调用点处；<br>为所用 inline 函数中的局部变量分配内存空间；<br>将 inline 函数的的输入参数和返回值映射到调用方法的局部变量空间中；<br>如果 inline 函数有多个返回点，将其转变为 inline 函数代码块末尾的分支（使用 GOTO）。</p>
-<p>优点：<br>内联函数同宏函数一样将在被调用处进行代码展开，省去了参数压栈、栈帧开辟与回收，结果返回等，从而提高程序运行速度。<br>内联函数相比宏函数来说，在代码展开时，会做安全检查或自动类型转换（同普通函数），而宏定义则不会。<br>在类中声明同时定义的成员函数，自动转化为内联函数，因此内联函数可以访问类的成员变量，宏定义则不能。<br>内联函数在运行时可调试，而宏定义不可以。</p>
-<p>缺点：<br>代码膨胀。<br>inline 函数无法随着函数库升级而升级，inline函数的改变需要重新编译。<br>是否内联，程序员不可控。内联函数只是对编译器的建议，是否对函数内联，决定权在于编译器。<br>注意：<br>虚函数可以是内联函数（可以被inline 修饰）。但在虚函数表现出多态特性时不能内联</p>
-<h2 id="assert"><a href="#assert" class="headerlink" title="assert()"></a>assert()</h2><p>断言，是宏，非函数。assert 宏的原型定义在 assert.h（C）、cassert（C++）中。<br>作用:<br>如果它的条件返回错误，则终止程序执行。可以通过定义 NDEBUG 来关闭 assert，但是需要在源代码的开头，include &lt;assert.h&gt; 之前。</p>
-<pre><code>#define NDEBUG          // 加上这行，则 assert 不可用
-#include &lt;assert.h&gt;
-assert( p != NULL );    // assert 不可用</code></pre><h2 id="pragma-pack-n"><a href="#pragma-pack-n" class="headerlink" title="pragma pack(n)"></a>pragma pack(n)</h2><p>设定结构体、联合以及类成员变量以 n 字节方式对齐</p>
-<p>pragma pack(n) 使用</p>
-<pre><code>#pragma pack(push)  // 保存对齐状态
-#pragma pack(4)     // 设定为 4 字节对齐
-
-struct test
-{
-    char m1;
-    double m4;
-    int m3;
-};
-
-#pragma pack(pop)   // 恢复对齐状态</code></pre><h2 id="位域"><a href="#位域" class="headerlink" title="位域"></a>位域</h2><p>Bit mode: 2;    // mode 占 2 位</p>
-<p>类可以将其（非静态）数据成员定义为位域（bit-field），在一个位域中含有一定数量的二进制位。当一个程序需要向其他程序或硬件设备传递二进制数据时，通常会用到位域。<br>位域在内存中的布局是与机器有关的<br>位域的类型必须是整型或枚举类型，带符号类型中的位域的行为将因具体实现而定<br>取地址运算符（&amp;）不能作用于位域，任何指针都无法指向类的位域</p>
-<h2 id="extern-“C”"><a href="#extern-“C”" class="headerlink" title="extern “C”"></a>extern “C”</h2><p>被 extern 限定的函数或变量是 extern 类型的<br>被 extern “C” 修饰的变量和函数是按照 C 语言方式编译和链接的<br>extern “C” 的作用是让 C++ 编译器将 extern “C” 声明的代码当作 C 语言代码处理，可以避免 C++ 因符号修饰导致代码不能和C语言库中的符号进行链接的问题。</p>
-<p>extern “C” 使用</p>
-<pre><code>#ifdef __cplusplus
-extern &quot;C&quot; {
-#endif
-
-void *memset(void *, int, size_t);
-
-#ifdef __cplusplus
-}
-#endif</code></pre><h2 id="struct-amp-typedef-struct"><a href="#struct-amp-typedef-struct" class="headerlink" title="struct &amp; typedef struct"></a>struct &amp; typedef struct</h2><p>由于编译器定位符号的规则（搜索规则）改变，导致不同于C语言。</p>
-<p>1.如果在类标识符空间定义了 struct Student {…};当使用 Student me; 时，编译器将搜索全局标识符表，Student 未找到，则在类标识符内搜索。<br>因此就表现<em>既可以使用 Student ，也可以使用 struct Student</em></p>
-<pre><code>// cpp
-struct Student { 
-    int age; 
-};
-
-void f( Student me );       // 正确，&quot;struct&quot; 关键字可省略</code></pre><p>2.若定义了与 Student 同名函数之后，则 Student 只代表函数，不代表结构体</p>
-<pre><code>typedef struct Student { 
-    int age; 
-} S;
-
-void Student() {}           // 正确，定义后 &quot;Student&quot; 只代表此函数
-
-//void S() {}               // 错误，符号 &quot;S&quot; 已经被定义为一个 &quot;struct Student&quot; 的别名
-
-int main() {
-    Student(); 
-    struct Student me;      // 或者 &quot;S me&quot;;
-    return 0;
-}</code></pre><h2 id="C-中-struct-和-class"><a href="#C-中-struct-和-class" class="headerlink" title="C++ 中 struct 和 class"></a>C++ 中 struct 和 class</h2><p>struct 更适合看成是一个数据结构的实现体，class 更适合看成是一个对象的实现体。<br>区别：<br>默认的继承访问权限不同。struct 是 public 的，class 是 private 的。</p>
-<h2 id="union-联合体"><a href="#union-联合体" class="headerlink" title="union 联合体"></a>union 联合体</h2><p>联合（union）是一种节省空间的特殊的类，一个 union 可以有多个数据成员，但是在任意时刻只有一个数据成员可以有值。当某个成员被赋值后其他成员变为未定义状态。联合有如下特点：<br>默认访问控制符为 public<br>可以含有构造函数、析构函数<br>不能含有引用类型的成员<br>不能继承自其他类，不能作为基类<br>不能含有虚函数<br>匿名 union 在定义所在作用域可直接访问 union 成员<br>匿名 union 不能包含 protected 成员或 private 成员<br>全局匿名联合必须是静态（static）的<br>union 使用</p>
-<pre><code>#include&lt;iostream&gt;
-
-union UnionTest {
-    UnionTest() : i(10) {};
-    int i;
-    double d;
-};
-
-static union {
-    int i;
-    double d;
-};
-
-int main() {
-    UnionTest u;
-
-    union {
-        int i;
-        double d;
-    };
-
-    std::cout &lt;&lt; u.i &lt;&lt; std::endl;  // 输出 UnionTest 联合的 10
-
-    ::i = 20;
-    std::cout &lt;&lt; ::i &lt;&lt; std::endl;  // 输出全局静态匿名联合的 20
-
-    i = 30;
-    std::cout &lt;&lt; i &lt;&lt; std::endl;    // 输出局部匿名联合的 30
-
-    return 0;
-}</code></pre><hr>
+                <h2 id="基本题型"><a href="#基本题型" class="headerlink" title="基本题型"></a>基本题型</h2><p>1.计数：<br>有多少种方式走到右下角<br>有多少种方法选出k个数使得和为Sum<br>2.求最大最小值<br>从左上角到右下角的最大数字和<br>最长上升子序列长度<br>3.求存在性<br>取石子游戏，先手是否必胜<br>能不能求出k个数使得和为Sum</p>
+<h2 id="硬币问题"><a href="#硬币问题" class="headerlink" title="硬币问题"></a>硬币问题</h2><p>问题描述：<br>你有三种硬币，面值分别为2元、5元、7元，每种硬币的数目足够多；<br>你需要买一本27元的商品；<br>如何用最少的硬币组合正好付清，无需对方找钱；</p>
+<h2 id="动态规划解析思路"><a href="#动态规划解析思路" class="headerlink" title="动态规划解析思路"></a>动态规划解析思路</h2><h3 id="1-弄清楚最后一步"><a href="#1-弄清楚最后一步" class="headerlink" title="1.弄清楚最后一步"></a>1.弄清楚最后一步</h3><h3 id="2-子问题"><a href="#2-子问题" class="headerlink" title="2.子问题"></a>2.子问题</h3><h3 id="3-转移方程"><a href="#3-转移方程" class="headerlink" title="3.转移方程"></a>3.转移方程</h3><h3 id="4-初始情况"><a href="#4-初始情况" class="headerlink" title="4.初始情况"></a>4.初始情况</h3><h3 id="5-边界条件"><a href="#5-边界条件" class="headerlink" title="5.边界条件"></a>5.边界条件</h3><h3 id="6-计算顺序"><a href="#6-计算顺序" class="headerlink" title="6.计算顺序"></a>6.计算顺序</h3><p>首先，我们可以预先想到的是，如果存在最优策略，那么最优策略肯定是有k枚硬币（a_1,a_2,…a_k)组成（如何组成的我们还不知道，可能有多种组合方式），且他们的面值和为27。</p>
+<p>其次，当我们确定k枚硬币的最优策略后，我们可以知道，若去掉这k枚硬币中的最后一枚硬币ak，那么剩下的k-1枚硬币的面值和为27-a_k。</p>
+<p>由反证法可知，剩下k-1枚硬币也是必然最优策略使得面值和为27-a_k。由此我们可以得到一个等价的新问题：最少用多少枚硬币可以使得面值为27-a_k，而我们的原问题可以描述为：最少用多少枚硬币可以使得面值为27。</p>
+<p>观察这两个问题，他们的问题是一样的（都是求最优组合策略），而后者的规模比前者小，所以后者是前者的一个子问题。因此我们将原问题转化为了一个它的子问题。</p>
+<p>我们定义状态f（X）= 最少用多少枚硬币使得面值和为X；</p>
+<p>ak的可能取值有2、5、7</p>
+<p>因此</p>
+<p>if a_k=2,则f（27）= f（27-2）+1;</p>
+<p>if a_k=5,则f（27）= f（27-5）+1;</p>
+<p>if a_k=27,则f（27）= f（27-7）+1;</p>
+<p>除此之外，没有其他可能了<br>所以</p>
+<p>f（27）= min(f（27-2）+1,f（27-5）+1,f（27-7）+1)</p>
+<p>以上就是状态转移方程</p>
+<p>到此，我们可以用递归方式解决这个问题了（完结撒花😁）。。。。<br>但那是不可能的（递归会爆栈的）<br>因此我们要继续动态规划。</p>
+<p>为了延续动态规划的思路，我们还需要考虑一些问题：</p>
+<p>考虑状态转移方程f（X）</p>
+<p>1.它的初始条件是怎么样的？</p>
+<p>f（0）= 0（为什么？解释：初始条件就是当状态转移方程无法计算，需要手工定义的条件）</p>
+<p>2.当X-2、X-5、X-7&lt;0时我们如何处理？（边界条件的处理）</p>
+<p>3.什么时候该过程停止？</p>
+<p>我们可以定义f(-1)=f(-2)…的值为负无穷，表示无法凑出</p>
+<p>因此f(1)= min(f（-1）+1,f（-4）+1,f（-6）+1)=负无穷，表示无法凑出1，这符合逻辑</p>
+<p>4.按照什么顺序进行计算呢？</p>
+<p>一个原则:按照已知条件来算，本题中，要计算f（27）则f（25）、f（22）、f（20）都必须被计算后才能得出f（27）。</p>
+<p>因此本题目要按X从小到大进行计算。</p>
+<p>代码如下：</p>
+<hr>
 
             </div>
             <hr/>
@@ -534,7 +442,7 @@ int main() {
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://yoursite.com/2020/03/23/c-yu-fa-shu-li/">http://yoursite.com/2020/03/23/c-yu-fa-shu-li/</a>
+                    <a href="http://yoursite.com/2020/03/24/dong-tai-gui-hua/">http://yoursite.com/2020/03/24/dong-tai-gui-hua/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -572,20 +480,16 @@ int main() {
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/C/">
-                                    <span class="chip bg-color">C++</span>
+                                <a href="/tags/leetcode/">
+                                    <span class="chip bg-color">leetcode</span>
                                 </a>
                             
-                                <a href="/tags/object/">
-                                    <span class="chip bg-color">object</span>
+                                <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
+                                    <span class="chip bg-color">动态规划</span>
                                 </a>
                             
-                                <a href="/tags/class/">
-                                    <span class="chip bg-color">class</span>
-                                </a>
-                            
-                                <a href="/tags/pointer/">
-                                    <span class="chip bg-color">pointer</span>
+                                <a href="/tags/%E7%AE%97%E6%B3%95/">
+                                    <span class="chip bg-color">算法</span>
                                 </a>
                             
                         </div>
@@ -751,9 +655,10 @@ int main() {
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2020/03/24/dong-tai-gui-hua/">
                     <div class="card-image">
@@ -770,9 +675,9 @@ int main() {
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-24
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-24
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -785,6 +690,7 @@ int main() {
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -811,30 +717,30 @@ int main() {
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/03/21/hello-world/">
+                <a href="/2020/03/23/c-yu-fa-shu-li/">
                     <div class="card-image">
                         
-                        <img src="/images/1.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/images/2.jpg" class="responsive-img" alt="C++语法特性笔记">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">C++语法特性笔记</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            hexo博客起始文档
+                            个人G站学习记录
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-21
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-23
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/website/" class="post-category">
-                                    website
+                            <a href="/categories/C/" class="post-category">
+                                    C++
                                 </a>
                             
                             
@@ -844,12 +750,20 @@ int main() {
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/blog/">
-                        <span class="chip bg-color">blog</span>
+                    <a href="/tags/C/">
+                        <span class="chip bg-color">C++</span>
                     </a>
                     
-                    <a href="/tags/hexo/">
-                        <span class="chip bg-color">hexo</span>
+                    <a href="/tags/object/">
+                        <span class="chip bg-color">object</span>
+                    </a>
+                    
+                    <a href="/tags/class/">
+                        <span class="chip bg-color">class</span>
+                    </a>
+                    
+                    <a href="/tags/pointer/">
+                        <span class="chip bg-color">pointer</span>
                     </a>
                     
                 </div>
